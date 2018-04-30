@@ -5,6 +5,10 @@ interface DocumentTitleProps {
     title: string;
 }
 
+interface WrappedProps extends DocumentTitleProps {
+    bar: string;
+}
+
 class DocumentTitle extends React.Component<DocumentTitleProps> {
     render() {
         if (this.props.children) {
@@ -15,14 +19,14 @@ class DocumentTitle extends React.Component<DocumentTitleProps> {
     }
 }
 
-function reducePropsToState(propsList: any[]) {
+function reducePropsToState(propsList: WrappedProps[]): string | undefined {
     const innermostProps = propsList[propsList.length - 1];
     if (innermostProps) {
         return innermostProps.title;
     }
 }
 
-function handleStateChangeOnClient(title: string) {
+function handleStateChangeOnClient(title?: string): void {
     document.title = title || "";
 }
 
@@ -31,4 +35,4 @@ const DocumentTitleWithSideEffects = withSideEffect(
     handleStateChangeOnClient,
 )(DocumentTitle);
 
-export default DocumentTitleWithSideEffects;
+React.createElement(DocumentTitleWithSideEffects, {title: "foo", bar: "baz"});
